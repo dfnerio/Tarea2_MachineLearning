@@ -1,56 +1,57 @@
 import sys
 import GR
+import numpy as np
 
-# LINEAR REGRESSION
+# LOGISTIC REGRESSION
 
 # train
 
-EPOCHS = 15000  # max iterations
-THRESHOLD = 0.0000001 # max diff to stop algorithm
-DELTA = 0.01  # delta
-TH0 = 0  # default value for theta0
-TH1 = 0  # default value for theta1
+EPOCHS = 5000  # max iterations
+THRESHOLD = 0.001  # max diff to stop algorithm
+ALPHA = 0.0001  # delta
+THETA = [0]  # default value for theta
 
-def train(xSet, ySet):
 
-    global TH0
-    global TH1
+def train(X, Y):
 
-    newTH0, newTH1 = GR.gd(DELTA, THRESHOLD, EPOCHS, xSet, ySet, TH0, TH1)
+    global THETA
+    THETA = [0.5] * len(X.columns)
 
-    TH0 = newTH0
-    TH1 = newTH1
+    print("training...")
+
+    J, THETA = GR.gd(X, Y, THETA, ALPHA, EPOCHS)
 
     def trained_h(x):
-        return h(x, TH0, TH1)
+        return h(x, THETA)
 
     return trained_h
 
 # test
 
 
-def test(h, x):
-    return h(x)
+def test(h, x, thres):
+    results = h(x)
+    for i in range(len(results)):
+        if (results[i] >= thres):
+            results[i] = 1
+        else:
+            results[i] = 0
+    return results
 
 
 # helpers
 
-def h(x, th0=TH0, th1=TH1):
-    return th0 + th1*x
+def h(x, theta=THETA):
+    return sig(np.dot(theta, x.T)) - 0.0000001
 
 
-def cost(xSet, ySet, th0, th1):
+def cost(x, y, theta):
+    hip = h(x, theta)
     tmp = 0
-    for i, x in enumerate(xSet):
-        tmp += (h(x, th0, th1) - ySet[i]) ** 2
-    return tmp / 2 * (len(xSet))
+    for i in range(len(y)):
+        tmp += (y[i]*np.log(hip) + (1-y[i])*np.log(1-hip))
+    return -(1/len(x)) * tmp
 
 
-def costD(xSet, ySet, th0, th1, calc4th1=False):
-    tmp = 0
-    for i, x in enumerate(xSet):
-        if(calc4th1):
-            tmp += (h(x, th0, th1) - ySet[i]) * x
-        else:
-            tmp += (h(x, th0, th1) - ySet[i])
-    return tmp / (len(xSet))
+def sig(x):
+    return 1 / (1 + (np.exp(-x)))

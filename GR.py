@@ -1,26 +1,14 @@
 import LR
-import sys
+import numpy as np
 
 # GRADIENT DESCENT
 
-def gd(a, err, n, xSet, ySet, th0, th1):
-    t0 = th0
-    t1 = th1
-
-    minCost = sys.maxsize
-
-    for i in range(n):
-        tmpCost = LR.cost(xSet, ySet, t0, t1)
-        if (tmpCost <= minCost):
-            if (minCost - tmpCost <= err):
-                break
-            minCost = tmpCost
-        else:
-            break
-
-        temp0 = t0 - a * LR.costD(xSet, ySet, t0, t1)
-        temp1 = t1 - a * LR.costD(xSet, ySet, t0, t1, True)
-        t0 = temp0
-        t1 = temp1
-
-    return t0, t1
+def gd(X, y, theta, alpha, epochs):
+    m = len(X)
+    J = [LR.cost(X, y, theta)]
+    for i in range(0, epochs):
+        h = LR.h(X, theta)
+        for i in range(0, len(X.columns)):
+            theta[i] -= (alpha/m) * np.sum((h-y)*X.iloc[:, i])
+        J.append(LR.cost(X, y, theta))
+    return J, theta
