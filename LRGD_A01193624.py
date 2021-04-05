@@ -9,9 +9,15 @@ import GR
 # main
 
 data = pd.read_csv('dataset-1.csv')
+test = pd.read_csv('test.csv')
+
 data.head()
+test.head()
+
 features = ["x0", "mark1", "mark2"]
 x = data[features]
 y = data.accepted
 
-print(LR.test(LR.train(x,y), x, 0.7))
+testX = test[features]
+
+print(LR.test(LR.train(x,y), testX, 0.7))

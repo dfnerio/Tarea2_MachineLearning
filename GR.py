@@ -12,3 +12,6 @@ def gd(X, y, theta, alpha, epochs):
             theta[i] -= (alpha/m) * np.sum((h-y)*X.iloc[:, i])
         J.append(LR.cost(X, y, theta))
     return J, theta
+
+
+
