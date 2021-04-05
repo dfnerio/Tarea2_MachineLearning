@@ -1,6 +1,6 @@
 
 # A01193624 Diego Frías Nerio
-# A0
+# A01197164 Javier Alejandro Domene
 
 import pandas as pd
 import LR
@@ -8,7 +8,7 @@ import GR
 
 # main
 
-data = pd.read_csv('dataset-1.csv')
+data = pd.read_csv('dataset-2.csv')
 test = pd.read_csv('test.csv')
 
 data.head()

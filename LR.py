@@ -25,6 +25,21 @@ def train(X, Y):
 
     return trained_h
 
+# Regularized
+
+def train_reg(X, Y):
+
+    global THETA
+    THETA = [0.5] * len(X.columns)
+
+    print("training...")
+
+    J, THETA = GR.gd_reg(X, Y, THETA, ALPHA, EPOCHS)
+
+    def trained_h(x):
+        return h(x, THETA)
+
+    return trained_h
 # test
 
 def test(h, x, thres):
@@ -46,6 +61,15 @@ def cost(x, y, theta):
     tmp = 0
     for i in range(len(y)):
         tmp += (y[i]*np.log(hip) + (1-y[i])*np.log(1-hip))
+    return -(1/len(x)) * tmp
+
+def cost_reg(x, y, theta, lambda_t):
+    hip = h(x, theta)
+    tmp = 0
+    for i in range(len(y)):
+        tmp += (y[i ]*np.log(hip) + (1-y[i])*np.log(1-hip))
+    reg = (lambda_t/(2*m)) * np.dot(theta, x.T)
+    tmp += reg
     return -(1/len(x)) * tmp
 
 def sig(x):
